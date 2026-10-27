@@ -1,0 +1,8 @@
+.git
+logs
+grade.sh
+tests/
+scripts/
+.github/
+README.md
+*.log

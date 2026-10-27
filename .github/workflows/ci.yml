@@ -1,0 +1,37 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  validate:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Lint Check
+        run: |
+          chmod +x scripts/*.sh tests/*.sh app/*.sh
+          ./scripts/lint.sh
+
+      - name: Run Unit Tests
+        run: |
+          ./tests/test.sh
+
+  docker:
+    name: Docker Build & Smoke Test
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build and Test via Script
+        run: |
+          chmod +x scripts/*.sh app/*.sh
+          ./scripts/build.sh
